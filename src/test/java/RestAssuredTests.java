@@ -17,7 +17,7 @@ public class RestAssuredTests {
 
     Response response;
 
-    public void base_url() {
+    public void RestAssuredTests() {
         baseURI = "manav";
     }
 
@@ -44,11 +44,12 @@ public class RestAssuredTests {
                         .time(lessThan(500L))
                         .extract().response();
 
+        Assert.assertNotNull(response.getBody());
+
         JsonPath jsonPathEvaluator = response.jsonPath();
         List<RequestBody.request> allResponds = jsonPathEvaluator.getList("data", RequestBody.request.class);
 
         // Asserting for the first response
-        Assert.assertNotNull(response.getBody());
         Assert.assertEquals(1, allResponds.get(0).getId());
         Assert.assertEquals("apple", allResponds.get(0).getName());
         Assert.assertEquals(3, allResponds.get(0).getPrice());
@@ -104,8 +105,8 @@ public class RestAssuredTests {
         // Asserting for the first response
         Assert.assertNotNull(response.getBody());
         Assert.assertEquals(3, (Integer) bodyJson.get("id"));
-        Assert.assertEquals("apple", bodyJson.get("name"));
-        Assert.assertEquals(3.5, (Double) bodyJson.get("price"));
+        Assert.assertEquals("banana", bodyJson.get("name"));
+        Assert.assertEquals(3.5, (double) bodyJson.get("price"));
         Assert.assertEquals(250, (Integer) bodyJson.get("stock"));
     }
 
@@ -148,6 +149,7 @@ public class RestAssuredTests {
                         .accept(ContentType.JSON)
                         .header("Contect-Type", "application/json")
                         .when()
+                        .body(requestData)
                         .get(createRequest().getName())
                         .then()
                         .statusCode(404)
