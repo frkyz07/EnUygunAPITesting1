@@ -37,7 +37,7 @@ public class RestAssuredTests {
 
     @Test(priority = 1)
     public void validGetRequest() {
-
+        // sending valid get request
         try{
             response =
                     given()
@@ -55,6 +55,7 @@ public class RestAssuredTests {
             logger.error("validGetRequest request didnt send");
         }
 
+        // getting the body as a list
 
         JsonPath jsonPathEvaluator = response.jsonPath();
         List<RequestBody.request> allResponds = jsonPathEvaluator.getList("data", RequestBody.request.class);
@@ -72,7 +73,7 @@ public class RestAssuredTests {
             System.out.println("Assertion Error"+e);
             logger.error("validGetRequest request first assertions didnt passed");
         }
-
+        // Asserting for the second response
         try{
             Assert.assertEquals(2, allResponds.get(1).getId());
             Assert.assertEquals("grapes", allResponds.get(1).getName());
@@ -83,11 +84,13 @@ public class RestAssuredTests {
             System.out.println("Assertion Error"+e);
             logger.error("validGetRequest request second assertions didnt passed");
         }
-        // Asserting for the second response
+
 
     }
     @Test(priority = 2)
     public void validPostRequest() {
+
+        // create a object for the request
 
         Map<String, Object> requestData = new HashMap<>();
         requestData.put("id", createRequest().getId());
@@ -95,6 +98,7 @@ public class RestAssuredTests {
         requestData.put("price", createRequest().getPrice());
         requestData.put("stock", createRequest().getStock());
 
+        // sending the request
         try {
             response = given()
                     .header("Content-Type", "application/json")
@@ -109,9 +113,9 @@ public class RestAssuredTests {
             System.out.println("Request cannot send "+e);
             logger.error("validPostRequest request didnt send");
         }
-
+        // getting the body
         JsonPath bodyJson = response.jsonPath();
-
+        // checking the body
         try {
             Assert.assertNotNull(response.getBody());
             Assert.assertEquals(3, (Integer) bodyJson.get("id"));
@@ -128,7 +132,7 @@ public class RestAssuredTests {
     }
     @Test(priority = 3)
     public void validGetNameRequest() {
-
+        // sending the body
         try {
             response =
                     given()
@@ -146,9 +150,9 @@ public class RestAssuredTests {
             System.out.println("Request cannot send"+e);
             logger.error("validGetNameRequest request didnt send");
         }
-
+        // getting the body
         JsonPath bodyJson = response.jsonPath();
-        // Asserting for the first response
+        // Asserting for the  response
         try {
             Assert.assertNotNull(response.getBody());
             Assert.assertEquals(3, (Integer) bodyJson.get("id"));
@@ -166,12 +170,15 @@ public class RestAssuredTests {
     @Test(priority = 4)
     public void invalidPostRequestFourHundred() {
 
+        // creating the object for the request
+
         Map<String, Object> requestData = new HashMap<>();
         requestData.put("name", createRequest().getName()); // invalid section for 400
         requestData.put("name", createRequest().getName());
         requestData.put("price", createRequest().getPrice());
         requestData.put("stock", createRequest().getStock());
 
+        // sending the request
         try {
             this.response =
                     given()
@@ -192,7 +199,7 @@ public class RestAssuredTests {
             logger.error("invalidPostRequestFourHundred request didnt send");
         }
 
-
+        // getting the body
         JsonPath bodyJson = response.jsonPath();
         // Asserting for the first response
         try {
@@ -207,12 +214,15 @@ public class RestAssuredTests {
     @Test(priority = 5)
     public void invalidPostRequestFourHundredFour() {
 
+        // creating the request
+
         Map<String, Object> requestData = new HashMap<>();
         requestData.put("id", 123123123); // invalid section for 404
         requestData.put("name", createRequest().getName());
         requestData.put("price", createRequest().getPrice());
         requestData.put("stock", createRequest().getStock());
 
+        // sending the request
         try {
             this.response =
                     given()
