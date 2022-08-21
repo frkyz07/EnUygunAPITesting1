@@ -2,6 +2,8 @@ import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import models.RequestBody;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -16,6 +18,9 @@ import static org.hamcrest.Matchers.lessThan;
 public class RestAssuredTests {
 
     Response response;
+
+    private static Logger logger = LoggerFactory.getLogger(RestAssuredTests.class);
+
 
     public void RestAssuredTests() {
         baseURI = "manav";
@@ -44,8 +49,10 @@ public class RestAssuredTests {
                             .statusCode(200)
                             .time(lessThan(500L))
                             .extract().response();
+            logger.info("validGetRequest request sended");
         }catch (RuntimeException e){
             System.out.println("Request cannot send "+e);
+            logger.error("validGetRequest request didnt send");
         }
 
 
@@ -60,8 +67,10 @@ public class RestAssuredTests {
             Assert.assertEquals("apple", allResponds.get(0).getName());
             Assert.assertEquals(3, allResponds.get(0).getPrice());
             Assert.assertEquals(100, allResponds.get(0).getStock());
+            logger.info("validGetRequest request first assertions passed");
         }catch (AssertionError e){
             System.out.println("Assertion Error"+e);
+            logger.error("validGetRequest request first assertions didnt passed");
         }
 
         try{
@@ -69,8 +78,10 @@ public class RestAssuredTests {
             Assert.assertEquals("grapes", allResponds.get(1).getName());
             Assert.assertEquals(5, allResponds.get(1).getPrice());
             Assert.assertEquals(50, allResponds.get(1).getStock());
+            logger.info("validGetRequest request second assertions passed");
         }catch (AssertionError e){
             System.out.println("Assertion Error"+e);
+            logger.error("validGetRequest request second assertions didnt passed");
         }
         // Asserting for the second response
 
@@ -93,8 +104,10 @@ public class RestAssuredTests {
                     .then()
                     .statusCode(200)
                     .extract().response();
+            logger.info("validPostRequest request sended");
         }catch (RuntimeException e){
             System.out.println("Request cannot send "+e);
+            logger.error("validPostRequest request didnt send");
         }
 
         JsonPath bodyJson = response.jsonPath();
@@ -105,8 +118,10 @@ public class RestAssuredTests {
             Assert.assertEquals("banana", bodyJson.get("name"));
             Assert.assertEquals(3.5, (Double) bodyJson.get("price"));
             Assert.assertEquals(250, (Integer) bodyJson.get("stock"));
+            logger.info("validPostRequest request assertions passed");
         }catch (AssertionError e){
             System.out.println("Assertion error"+e);
+            logger.error("validPostRequest request assertions didnt passed");
         }
 
 
@@ -125,12 +140,12 @@ public class RestAssuredTests {
                             .statusCode(200)
                             .time(lessThan(500L))
                             .extract().response();
+            logger.info("validGetNameRequest request sended");
 
         }catch (RuntimeException e){
             System.out.println("Request cannot send"+e);
+            logger.error("validGetNameRequest request didnt send");
         }
-
-
 
         JsonPath bodyJson = response.jsonPath();
         // Asserting for the first response
@@ -140,8 +155,10 @@ public class RestAssuredTests {
             Assert.assertEquals("banana", bodyJson.get("name"));
             Assert.assertEquals(3.5, (double) bodyJson.get("price"));
             Assert.assertEquals(250, (Integer) bodyJson.get("stock"));
+            logger.info("validGetNameRequest request assertions passed");
         }catch (AssertionError e){
             System.out.println("Assertion Error"+e);
+            logger.error("validGetNameRequest request assertions didnt passed");
         }
 
     }
@@ -167,8 +184,12 @@ public class RestAssuredTests {
                             .statusCode(400)
                             .time(lessThan(500L))
                             .extract().response();
+
+            logger.info("invalidPostRequestFourHundred request sended");
+
         }catch (RuntimeException e){
             System.out.println("Request cannot send"+e);
+            logger.error("invalidPostRequestFourHundred request didnt send");
         }
 
 
@@ -176,8 +197,10 @@ public class RestAssuredTests {
         // Asserting for the first response
         try {
             Assert.assertNull(bodyJson);
+            logger.info("invalidPostRequestFourHundred request assertions passed");
         }catch (AssertionError e){
             System.out.println("Assertion Error"+e);
+            logger.error("invalidPostRequestFourHundred request assertions didnt passed");
         }
 
     }
@@ -203,8 +226,11 @@ public class RestAssuredTests {
                             .time(lessThan(500L))
                             .extract().response();
 
+            logger.info("invalidPostRequestFourHundredFour request sended");
+
         }catch (RuntimeException e){
             System.out.println("Request cannot send"+e);
+            logger.error("invalidPostRequestFourHundredFour request didnt send");
         }
 
 
@@ -212,8 +238,10 @@ public class RestAssuredTests {
         // Asserting for the first response
         try {
             Assert.assertNull(bodyJson);
+            logger.info("invalidPostRequestFourHundredFour request assertions passed");
         }catch (AssertionError e){
             System.out.println("Assertion Error"+e);
+            logger.error("invalidPostRequestFourHundredFour request assertions didnt passed");
         }
     }
 
